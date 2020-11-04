@@ -1,0 +1,33 @@
+body {
+  background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.App {
+  text-align: center;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  min-height: 100vh;
+}
+
+.search-form {
+  width: 18rem;
+  padding-top: 10px;
+  min-height: 10vh;
+}
+
+.search-bar {
+  margin-bottom: 10px;
+}
+
+.content {
+  margin-top: 20px;
+}
+
+.recipe {
+  margin: 20px 0;
+}
+
+.recipe-text {
+  padding: 5px;
+}
