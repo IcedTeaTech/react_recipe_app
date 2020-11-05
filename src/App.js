@@ -1,20 +1,16 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
+import axios from "axios";
 import Recipe from "./components/Recipe";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import "./App.css";
 
 function App() {
-  const APP_ID = `${process.env.REACT_APP_APP_ID}`;
-  const API_KEY = `${process.env.REACT_APP_API_KEY}`;
-
   const [recipes, setRecipes] = useState([]);
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
-
-  const url = `https://api.edamam.com/search?q=${query}&app_id=${APP_ID}&app_key=${API_KEY}`;
 
   const updateSearch = (e) => {
     setSearch(e.target.value);
@@ -28,15 +24,18 @@ function App() {
 
   useEffect(() => {
     const getRecipes = async () => {
-      const response = await fetch(url);
-      const data = await response.json();
-      setRecipes(data.hits);
+      const response = await axios.post(
+        "https://jk-recipe-app-backend.herokuapp.com/recipes",
+        { searchQuery: query }
+      );
+
+      setRecipes(response.data.hits);
     };
 
     if (query !== "") {
       getRecipes();
     }
-  }, [query, url, APP_ID]);
+  }, [query]);
 
   return (
     <div className="App container">
