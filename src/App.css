@@ -31,3 +31,7 @@ body {
 .recipe-text {
   padding: 5px;
 }
+
+.loading-spinner {
+  margin: 10px;
+}

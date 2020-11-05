@@ -1,16 +1,17 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect, useState } from "react";
-import { nanoid } from "nanoid";
 import axios from "axios";
-import Recipe from "./components/Recipe";
+import Recipes from "./components/Recipes";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Spinner from "react-bootstrap/Spinner";
 import "./App.css";
 
 function App() {
   const [recipes, setRecipes] = useState([]);
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const updateSearch = (e) => {
     setSearch(e.target.value);
@@ -19,6 +20,7 @@ function App() {
   const getSearch = (e) => {
     e.preventDefault();
     setQuery(search);
+    setLoading(true);
     setSearch("");
   };
 
@@ -30,6 +32,7 @@ function App() {
       );
 
       setRecipes(response.data.hits);
+      setLoading(false);
     };
 
     if (query !== "") {
@@ -54,21 +57,17 @@ function App() {
           Search
         </Button>
       </Form>
+      {loading ? (
+        <Spinner
+          animation="border"
+          variant="info"
+          className="loading-spinner"
+        />
+      ) : (
+        <Recipes recipes={recipes} />
+      )}
 
-      <div className="content container">
-        <div className="row d-flex justify-content-center">
-          {recipes.map((recipe) => (
-            <Recipe
-              key={"recipe-" + nanoid()}
-              title={recipe.recipe.label}
-              calories={recipe.recipe.calories}
-              img={recipe.recipe.image}
-              ingredients={recipe.recipe.ingredients}
-            />
-          ))}
-        </div>
-        <p>Made with React and Bootstrap 4 by Jesse Kroon</p>
-      </div>
+      <p>Made with React and Bootstrap 4 by Jesse Kroon</p>
     </div>
   );
 }
