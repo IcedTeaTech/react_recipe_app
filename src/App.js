@@ -7,7 +7,7 @@ import Form from "react-bootstrap/Form";
 import Spinner from "react-bootstrap/Spinner";
 import "./App.css";
 
-function App() {
+function useGetData() {
   const [state, setState] = useState({
     recipes: [],
     search: "",
@@ -15,7 +15,30 @@ function App() {
     status: "",
   });
 
-  const { recipes, search, query, status } = state;
+  useEffect(() => {
+    const getRecipes = async () => {
+      const response = await axios.post(
+        "https://jk-recipe-app-backend.herokuapp.com/recipes",
+        { searchQuery: state.query }
+      );
+      setState((prevState) => ({
+        ...prevState,
+        recipes: response.data.hits,
+        status: "idle",
+      }));
+    };
+
+    if (state.query !== "") {
+      getRecipes();
+    }
+  }, [state.query]);
+
+  return { state, setState };
+}
+
+function App() {
+  const { state, setState } = useGetData();
+  const { recipes, search, status } = state;
 
   const updateSearch = (e) => {
     setState((prevState) => ({ ...prevState, search: e.target.value }));
@@ -30,24 +53,6 @@ function App() {
       search: "",
     }));
   };
-
-  useEffect(() => {
-    const getRecipes = async () => {
-      const response = await axios.post(
-        "https://jk-recipe-app-backend.herokuapp.com/recipes",
-        { searchQuery: query }
-      );
-      setState((prevState) => ({
-        ...prevState,
-        recipes: response.data.hits,
-        status: "idle",
-      }));
-    };
-
-    if (query !== "") {
-      getRecipes();
-    }
-  }, [query]);
 
   return (
     <div className="App container">

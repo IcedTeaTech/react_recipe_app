@@ -12,7 +12,7 @@ const Recipe = ({ title, calories, img, ingredients }) => {
             <Card.Title>{title}</Card.Title>
             <Card.Text>Calories: {calories}</Card.Text>
             <ul
-              style={{ "list-style-type": "square" }}
+              style={{ listStyleType: "square" }}
               className="d-flex flex-column align-items-center justify-content-center"
             >
               {ingredients.map((ingredient) => (
