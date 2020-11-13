@@ -8,20 +8,24 @@ import Spinner from "react-bootstrap/Spinner";
 import "./App.css";
 
 function App() {
-  const [recipes, setRecipes] = useState([]);
-  const [search, setSearch] = useState("");
-  const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [state, setState] = useState({
+    recipes: [],
+    search: "",
+    query: "",
+    status: "",
+  });
+
+  const { recipes, search, query, status } = state;
 
   const updateSearch = (e) => {
-    setSearch(e.target.value);
+    setState((prevState) => ({ ...prevState, search: e.target.value }));
   };
 
   const getSearch = (e) => {
     e.preventDefault();
-    setQuery(search);
-    setLoading(true);
-    setSearch("");
+    setState((prevState) => ({ ...prevState, query: search }));
+    setState((prevState) => ({ ...prevState, status: "loading" }));
+    setState((prevState) => ({ ...prevState, search: "" }));
   };
 
   useEffect(() => {
@@ -30,9 +34,8 @@ function App() {
         "https://jk-recipe-app-backend.herokuapp.com/recipes",
         { searchQuery: query }
       );
-
-      setRecipes(response.data.hits);
-      setLoading(false);
+      setState((prevState) => ({ ...prevState, recipes: response.data.hits }));
+      setState((prevState) => ({ ...prevState, status: "idle" }));
     };
 
     if (query !== "") {
@@ -57,7 +60,7 @@ function App() {
           Search
         </Button>
       </Form>
-      {loading ? (
+      {status === "loading" ? (
         <Spinner
           animation="border"
           variant="info"
