@@ -23,9 +23,12 @@ function App() {
 
   const getSearch = (e) => {
     e.preventDefault();
-    setState((prevState) => ({ ...prevState, query: search }));
-    setState((prevState) => ({ ...prevState, status: "loading" }));
-    setState((prevState) => ({ ...prevState, search: "" }));
+    setState((prevState) => ({
+      ...prevState,
+      query: search,
+      status: "loading",
+      search: "",
+    }));
   };
 
   useEffect(() => {
@@ -34,8 +37,11 @@ function App() {
         "https://jk-recipe-app-backend.herokuapp.com/recipes",
         { searchQuery: query }
       );
-      setState((prevState) => ({ ...prevState, recipes: response.data.hits }));
-      setState((prevState) => ({ ...prevState, status: "idle" }));
+      setState((prevState) => ({
+        ...prevState,
+        recipes: response.data.hits,
+        status: "idle",
+      }));
     };
 
     if (query !== "") {
